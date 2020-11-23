@@ -12,17 +12,17 @@ class Settings(BaseSettings):
     MYSQL_PASSWORD = "tdt2020"
     MYSQL_DB = "mobile_db1"
   #server config
+
    # Trieu's macbook pro host ip
-    #HOST = '25.71.124.112'
-   # Raspberry host ip
-    HOST = '192.168.1.12'
-   #port number
+    HOST = '25.71.124.112'
+    IMG_HOST = '25.71.124.112'
     PORT = 8000
-  #IMG config
-   #image host Trieu's macbook pro
-    #IMG_HOST = '25.71.124.112'
-   #image host raspberry
+   
+"""    #image host raspberry
     IMG_HOST = 'tdtsv.ddns.net'
-  #var
+    HOST = '192.168.1.12'
+    PORT = 8000
+ """  #var
+
 
 settings = Settings()
