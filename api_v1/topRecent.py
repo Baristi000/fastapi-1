@@ -17,8 +17,11 @@ def invertData(Data):
 def getAllItem():
     UserId = '1'
     q = 'select * from foods, TopRecent where TopRecent.UserId = \"'+UserId+'\" and foods.FoodId = TopRecent.FoodId ;'
-    result = invertData(query_exec(q))
-    result = db_handler.removeUserId(result)
+    maindata = invertData(query_exec(q))
+    maindata = db_handler.removeUserId(maindata)
+    q = 'select * from Bag where UserId = \"'+UserId+'\";'
+    tempdata = db_handler.removeUserId(query_exec(q))
+    result = db_handler.joindata(maindata, tempdata, 'FoodId', 'quantity', 0)
     return result
 
 @router.get('/updateTopRecent{FoodId}')
@@ -39,6 +42,9 @@ def updateTopRecent(FoodId):
     q = 'insert into TopRecent values(\"'+FoodId+'\", \"1\")'
     result = query_exec(q)
     q = 'select * from foods, TopRecent where TopRecent.UserId = \"'+UserId+'\" and foods.FoodId = TopRecent.FoodId ;'
-    result = invertData(query_exec(q))
-    result = db_handler.removeUserId(result)
+    maindata = invertData(query_exec(q))
+    maindata = db_handler.removeUserId(maindata)
+    q = 'select * from Bag where UserId = \"'+UserId+'\";'
+    tempdata = db_handler.removeUserId(query_exec(q))
+    result = db_handler.joindata(maindata, tempdata, 'FoodId', 'quantity', 0)
     return result

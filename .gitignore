@@ -1,3 +1,4 @@
-\env
-\config.py
-\.DS_Store
+/env
+/config.py
+/.DS_Store
+/api_v1\img
