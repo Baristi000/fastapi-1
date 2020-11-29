@@ -1,5 +1,5 @@
 /env
-/core/config.py
+**/config.py
 **/.DS_Store
 .DS_Store
-/api_v1/img
+**/img
