@@ -42,24 +42,24 @@ def getOrder(OrderId:str):
         r.update({'data' : temp1})
     return result
 
-@router.get('/doneOrder{OrderId}+date={date}+time={time}')
-def doneOrder(OrderId:str, date:str, time:str):
+@router.get('/doneOrder{OrderId}')
+def doneOrder(OrderId:str):
     UserId = '1'
     q = 'select count(*) as num from history where UserId = \"'+UserId+'\" and OrderId = \"'+OrderId+'\" and status = \"1\";'
     num = db.query_exec(q)[0]['num']
     if num == 0:
         raise HTTPException(status_code = 500, detail = 'Order not found')
-    q = 'update history set status = \"0\", RecieveDate = \"'+str(date)+';'+str(time)+'\" where OrderId = \"'+OrderId+'\" and UserId = \"'+UserId+'\";'
+    q = 'update history set status = \"0\" where OrderId = \"'+OrderId+'\" and UserId = \"'+UserId+'\";'
     db.query_exec(q)
     return {'status' : 'oke'}
 
-@router.get('/cancellOrder{OrderId}+date={date}+time={time}')
+@router.get('/cancellOrder{OrderId}')
 def cancellOrder(OrderId:str, date:str, time:str):
     UserId = '1'
     q = 'select count(*) as num from history where UserId = \"'+UserId+'\" and OrderId = \"'+OrderId+'\" and status = \"1\";'
     num = db.query_exec(q)[0]['num']
     if num == 0:
         raise HTTPException(status_code = 500, detail = 'Order not found')
-    q = 'update history set status = \"-1\", RecieveDate = \"'+str(date)+';'+str(time)+'\" where OrderId = \"'+OrderId+'\" and UserId = \"'+UserId+'\";'
+    q = 'update history set status = \"-1\" where OrderId = \"'+OrderId+'\" and UserId = \"'+UserId+'\";'
     db.query_exec(q)
     return {'status' : 'oke'}
