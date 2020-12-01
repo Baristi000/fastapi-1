@@ -44,7 +44,7 @@ async def addNewFood(
     file = file.split(',')[1]
     file = b64decode(file, validate = True)
     img = ih.Iconverse(file)                                                    #read image
-    name = FoodType+str(random.randrange(1,1001))+'.png'                  #create new name
+    name = FoodType+str(random.randrange(1,1001))+'.png'                        #create new name
     img.save("./api_v1/img/"+str(name))                                         #save image with new name
     ImageUrl = 'http://'+str(settings.IMG_HOST)+':'+str(settings.PORT)+'/getImage/'+str(name) #creaet image url
     q = 'insert into foods(FoodType, Rating, Price, Title, Content, ImageUrl) values(\"'+FoodType+'\",\"'+Rating+'\",\"'+Price+'\",\"'+Title+'\",\"'+Content+'\",\"'+ImageUrl+'\");'
@@ -83,7 +83,7 @@ async def editFood(
     Title: str = Body(...),
     Content: str = Body(...)
     ):
-    file = ImageUrl
+    file = str(ImageUrl)
     #check whether FoodId existed or not
     q = 'select count(*) as num from foods where FoodId = \"'+FoodId+'\";'
     num = query_exec(q)[0]['num']
@@ -106,7 +106,7 @@ async def editFood(
             file = file.split(',')[1]
             file = b64decode(file, validate = True)
             img = ih.Iconverse(file)                                                    #read image
-            name = FoodType+Title+str(random.randrange(1,1001))+'.png'                  #create new name
+            name = FoodType+str(random.randrange(1,1001))+'.png'                        #create new name
             img.save("./api_v1/img/"+str(name))                                         #save image with new name
             ImageUrl = 'http://'+str(settings.IMG_HOST)+':'+str(settings.PORT)+'/getImage/'+str(name) #creaet image url
         else:

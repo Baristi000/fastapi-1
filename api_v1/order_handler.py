@@ -54,7 +54,7 @@ def doneOrder(OrderId:str):
     return {'status' : 'oke'}
 
 @router.get('/cancellOrder{OrderId}')
-def cancellOrder(OrderId:str, date:str, time:str):
+def cancellOrder(OrderId:str):
     UserId = '1'
     q = 'select count(*) as num from history where UserId = \"'+UserId+'\" and OrderId = \"'+OrderId+'\" and status = \"1\";'
     num = db.query_exec(q)[0]['num']
