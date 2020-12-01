@@ -56,18 +56,19 @@ async def addNewFood(
     query_exec(q)
     return({'status':'oke'})
 
-@router.get('/deleteFood{FoodId}')
-async def deleteFood(FoodId):
-    q = 'select ImageUrl from foods where FoodId = \"'+FoodId+'\";'             #create get image url query
-    ImageUrl = str(query_exec(q)).split("/")                                    #get image url
-    ImagePath = str(ImageUrl[len(ImageUrl)-1].strip("\'}]"))                    #get image name
-    q = 'delete from foods where FoodId = \"'+FoodId+'\";'                      #create delete query
-    query_exec(q)                                                               #delete data in table foods
-    q = 'delete from TopRecent where FoodId = \"'+FoodId+'\";'                  
-    query_exec(q)                                                               #delete data in table TopRecent
-    try:                                                                        #delete image
-        os.remove('./api_v1/img/'+ImagePath)                                        
-        print("Remove successfull!")
-    except OSError as error:
-        print(error)
+@router.get('/deleteFood')
+async def deleteFood(FoodIds:list = Body(...)):
+    for FoodId in FoodIds:
+        q = 'select ImageUrl from foods where FoodId = \"'+FoodId+'\";'             #create get image url query
+        ImageUrl = str(query_exec(q)).split("/")                                    #get image url
+        ImagePath = str(ImageUrl[len(ImageUrl)-1].strip("\'}]"))                    #get image name
+        q = 'delete from foods where FoodId = \"'+FoodId+'\";'                      #create delete query
+        query_exec(q)                                                               #delete data in table foods
+        q = 'delete from TopRecent where FoodId = \"'+FoodId+'\";'                  
+        query_exec(q)                                                               #delete data in table TopRecent
+        try:                                                                        #delete image
+            os.remove('./api_v1/img/'+ImagePath)                                        
+            print("Remove successfull!")
+        except OSError as error:
+            print(error)
     return ({'status':'oke'})
