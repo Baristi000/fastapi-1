@@ -43,7 +43,7 @@ async def addNewFood(
     ih.mk_dir('./api_v1/img')                                                   #create dir
     file = file.split(',')[1]
     file = b64decode(file, validate = True)
-    img = ih.Iconverse(file)                                       #read image
+    img = ih.Iconverse(file)                                                    #read image
     name = FoodType+Title+str(random.randrange(1,1001))+'.png'                  #create new name
     img.save("./api_v1/img/"+str(name))                                         #save image with new name
     ImageUrl = 'http://'+str(settings.IMG_HOST)+':'+str(settings.PORT)+'/getImage/'+str(name) #creaet image url
@@ -56,8 +56,8 @@ async def addNewFood(
     query_exec(q)
     return({'status':'oke'})
 
-@router.get('/deleteFood')
-async def deleteFood(FoodIds:list = Body(...)):
+@router.post('/deleteFood')
+async def deleteFood(FoodIds : list = Body(...)):
     for FoodId in FoodIds:
         q = 'select ImageUrl from foods where FoodId = \"'+FoodId+'\";'             #create get image url query
         ImageUrl = str(query_exec(q)).split("/")                                    #get image url
