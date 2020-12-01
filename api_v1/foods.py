@@ -1,7 +1,7 @@
 import os, random
 from base64 import b64decode
 from typing import List, Optional
-from fastapi import APIRouter,Body
+from fastapi import APIRouter, Body, HTTPException
 from components.db import query_exec
 from components import img_handler, db_handler
 from core.config import settings
@@ -72,3 +72,46 @@ async def deleteFood(FoodIds : list = Body(...)):
         except OSError as error:
             print(error)
     return ({'status':'oke'})
+
+@router.post('/editFood')
+async def editFood(
+    FoodId: str = Body(...),
+    ImageUrl: str = Body(...),
+    FoodType: str = Body(...),
+    Rating: str = Body(...),
+    Price: str = Body(...),
+    Title: str = Body(...),
+    Content: str = Body(...)
+    ):
+    file = ImageUrl
+    #check whether FoodId existed or not
+    q = 'select count(*) as num from foods where FoodId = \"'+FoodId+'\";'
+    num = query_exec(q)[0]['num']
+    if num == 0:
+        raise HTTPException(status_code = 500, detail = 'FoodId not found')
+    else:
+        #update image in folder './api_v1/img' if change
+        if 'base64' in str(file):
+            #delete image
+            q = 'select ImageUrl from foods where FoodId = \"'+FoodId+'\";'             #create get image url query
+            ImageUrl = str(query_exec(q)).split("/")                                    #get image url
+            ImagePath = str(ImageUrl[len(ImageUrl)-1].strip("\'}]"))
+            try:                                                                        #delete image
+                os.remove('./api_v1/img/'+ImagePath)                                        
+                print("Remove image "+str(ImagePath)+" successfull!")
+            except OSError as error:
+                print(error)
+            #store new image
+            ih.mk_dir('./api_v1/img')                                                   #create dir
+            file = file.split(',')[1]
+            file = b64decode(file, validate = True)
+            img = ih.Iconverse(file)                                                    #read image
+            name = FoodType+Title+str(random.randrange(1,1001))+'.png'                  #create new name
+            img.save("./api_v1/img/"+str(name))                                         #save image with new name
+            ImageUrl = 'http://'+str(settings.IMG_HOST)+':'+str(settings.PORT)+'/getImage/'+str(name) #creaet image url
+        else:
+            ImageUrl = file
+        #update data in database at table foods
+        q = 'update foods set FoodType = \"'+FoodType+'\", Rating = \"'+FoodType+'\", Price = \"'+Price+'\", Title = \"'+Title+'\", Content = \"'+Content+'\", ImageUrl = \"'+ImageUrl+'\" where FoodId = \"'+FoodId+'\";'
+        query_exec(q)
+    return {'status' : 'oke'}
