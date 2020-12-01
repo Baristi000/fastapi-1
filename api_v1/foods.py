@@ -91,7 +91,7 @@ async def editFood(
         raise HTTPException(status_code = 500, detail = 'FoodId not found')
     else:
         #update image in folder './api_v1/img' if change
-        if 'base64' in str(file):
+        if '/png;base64,' in str(file):
             #delete image
             q = 'select ImageUrl from foods where FoodId = \"'+FoodId+'\";'             #create get image url query
             ImageUrl = str(query_exec(q)).split("/")                                    #get image url
