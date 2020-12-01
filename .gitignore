@@ -3,3 +3,5 @@
 **/.DS_Store
 .DS_Store
 **/img
+**__pycache__**
+**/__pycache__/**
