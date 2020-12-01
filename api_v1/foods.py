@@ -68,7 +68,7 @@ async def deleteFood(FoodIds : list = Body(...)):
         query_exec(q)                                                               #delete data in table TopRecent
         try:                                                                        #delete image
             os.remove('./api_v1/img/'+ImagePath)                                        
-            print("Remove successfull!")
+            print("Remove image "+str(ImagePath)+" successfull!")
         except OSError as error:
             print(error)
     return ({'status':'oke'})
